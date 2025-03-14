@@ -4,10 +4,17 @@ import {
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiConsumes,
+  ApiBody,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PatientService } from '../../provider/patient.service';
 import { CreatePatientsRequest } from '../request/patient.request';
+import { TotalResponse } from '../response/patient.response';
 
 @ApiTags('/patients')
 @Controller('patients')
@@ -17,9 +24,18 @@ export class PatientController {
   @ApiOperation({ summary: '엑셀파일등록' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: CreatePatientsRequest })
+  @ApiResponse({ status: 201, type: TotalResponse })
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  create(@UploadedFile() file: Express.Multer.File) {
-    this.patientService.create(file);
+  async create(
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<TotalResponse> {
+    console.time('time');
+
+    const total = await this.patientService.create(file);
+
+    console.timeEnd('time');
+
+    return { total };
   }
 }

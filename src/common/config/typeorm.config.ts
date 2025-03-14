@@ -12,5 +12,7 @@ export function typeOrmConfigFactory(
     password: configService.get('DB_PASSWORD'),
     database: configService.get('DB_DATABASE'),
     synchronize: true,
+    autoLoadEntities: true,
+    // logging: ['query'],
   };
 }
