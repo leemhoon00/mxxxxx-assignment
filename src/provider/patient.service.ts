@@ -6,6 +6,7 @@ import { PatientRepository } from 'src/repository/patient.repository';
 @Injectable()
 export class PatientService {
   constructor(private patientRepository: PatientRepository) {}
+
   async create(file: Express.Multer.File) {
     const excel = XLSX.read(file.buffer, { type: 'buffer' });
 
@@ -106,5 +107,17 @@ export class PatientService {
       Object.keys(chartNumberPatients).length +
       Object.keys(notChartNumberPatients).length
     );
+  }
+
+  async getManyByPage(input: { page: number; size: number }) {
+    const [patients, count] = await Promise.all([
+      this.patientRepository.findManyByPage(input),
+      this.patientRepository.countAll(),
+    ]);
+
+    return {
+      patients,
+      totalCount: count,
+    };
   }
 }

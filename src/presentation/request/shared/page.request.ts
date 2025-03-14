@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsOptional, Min } from 'class-validator';
 
-export class CursorRequest {
+export class PageRequest {
   @ApiProperty({ required: false, default: 1 })
   @IsOptional()
   @IsInt()

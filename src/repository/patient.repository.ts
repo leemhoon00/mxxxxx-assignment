@@ -39,6 +39,20 @@ export class PatientRepository {
       },
     );
   }
+
+  async findManyByPage({ page, size }: { page: number; size: number }) {
+    return await this.patientRepo.find({
+      skip: (page - 1) * size,
+      take: size,
+      order: {
+        id: 'ASC',
+      },
+    });
+  }
+
+  async countAll() {
+    return await this.patientRepo.count();
+  }
 }
 
 export type CreatePatientInput = Omit<PatientEntity, 'id'>;

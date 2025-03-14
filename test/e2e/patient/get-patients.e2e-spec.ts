@@ -68,4 +68,33 @@ describe('GET /patients - 환자 리스트 조회', () => {
     expect(response1.status).toBe(400);
     expect(response2.status).toBe(400);
   });
+
+  it('200과 함께 환자리스트를 조회한다', async () => {
+    // given
+    await patientRepo.save(
+      Array.from({ length: 20 }).map((_, i) => ({
+        chartNumber: i,
+        name: `test${i}`,
+        phoneNumber: `0101234${i}`,
+        residentNumber: `000${i}`,
+      })),
+    );
+
+    // when
+    const response1 = await request(app.getHttpServer())
+      .get('/patients')
+      .query({ size: 8 });
+    const response2 = await request(app.getHttpServer())
+      .get('/patients')
+      .query({ page: 2 });
+
+    // then
+    expect(response1.status).toBe(200);
+    expect(response1.body.totalCount).toBe(20);
+    expect(response1.body.patients).toHaveLength(8);
+
+    expect(response2.status).toBe(200);
+    expect(response2.body.totalCount).toBe(20);
+    expect(response2.body.patients).toHaveLength(10);
+  });
 });

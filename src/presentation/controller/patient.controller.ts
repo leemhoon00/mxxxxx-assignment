@@ -17,9 +17,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { PatientService } from '../../provider/patient.service';
 import { CreatePatientsRequest } from '../request/patient.request';
 import { TotalResponse } from '../response/patient.response';
-import { CursorRequest } from '../request/shared/cursor.request';
+import { PageRequest } from '../request/shared/page.request';
+import { PatientsResponse } from '../response/patient.response';
 
 @ApiTags('/patients')
+@ApiResponse({ status: 400, description: '유효성 검사 실패' })
 @Controller('patients')
 export class PatientController {
   constructor(private patientService: PatientService) {}
@@ -33,18 +35,20 @@ export class PatientController {
   async create(
     @UploadedFile() file: Express.Multer.File,
   ): Promise<TotalResponse> {
-    console.time('time');
-
     const total = await this.patientService.create(file);
-
-    console.timeEnd('time');
 
     return { total };
   }
 
   @ApiOperation({ summary: '환자 리스트 조회' })
+  @ApiResponse({ status: 200, type: PatientsResponse })
   @Get()
-  getMany(@Query() query: CursorRequest) {
-    console.log(query);
+  async getMany(
+    @Query() { page, size }: PageRequest,
+  ): Promise<PatientsResponse> {
+    return await this.patientService.getManyByPage({
+      page: page ?? 1,
+      size: size ?? 10,
+    });
   }
 }
