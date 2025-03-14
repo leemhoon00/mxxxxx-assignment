@@ -29,7 +29,7 @@ docker compose down
 
 #### 3. 데이터베이스 스키마 설명
 
-![image](https://github.com/user-attachments/assets/2f2ae2d1-a7ba-4681-9de4-8ca1b1053cb4)
+![image](https://github.com/user-attachments/assets/b269a34b-df99-4a7d-84ae-74d68853d5b1)
 
 - `chartNumber`를 nullable로 설정할 시 Unique 제약조건 검사에 차질이 생기기때문에 어플리케이션 레벨에서 default: 0을 설정하여 저장하고 있습니다.
 - 데이터 성격에 따라 다르게 설정해야 하지만 샘플 엑셀파일만으로 판단했을 때 카디널리티가 높은 순서(전화번호, 차트번호, 이름)대로 Unique 컬럼을 설정했습니다.
