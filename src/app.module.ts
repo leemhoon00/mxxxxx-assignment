@@ -3,6 +3,7 @@ import { globalPipe } from './core/pipe/global.pipe';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfigFactory } from './common/config/typeorm.config';
+import { PatientModule } from './module/patient.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { typeOrmConfigFactory } from './common/config/typeorm.config';
       inject: [ConfigService],
       useFactory: typeOrmConfigFactory,
     }),
+    PatientModule,
   ],
   providers: [globalPipe],
 })
