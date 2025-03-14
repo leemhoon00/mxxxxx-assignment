@@ -3,6 +3,8 @@ import {
   Post,
   UseInterceptors,
   UploadedFile,
+  Get,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -15,6 +17,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { PatientService } from '../../provider/patient.service';
 import { CreatePatientsRequest } from '../request/patient.request';
 import { TotalResponse } from '../response/patient.response';
+import { CursorRequest } from '../request/shared/cursor.request';
 
 @ApiTags('/patients')
 @Controller('patients')
@@ -37,5 +40,11 @@ export class PatientController {
     console.timeEnd('time');
 
     return { total };
+  }
+
+  @ApiOperation({ summary: '환자 리스트 조회' })
+  @Get()
+  getMany(@Query() query: CursorRequest) {
+    console.log(query);
   }
 }
