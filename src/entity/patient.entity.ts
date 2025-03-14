@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
-@Unique(['chartNumber', 'name', 'phoneNumber'])
+@Unique(['phoneNumber', 'chartNumber', 'name'])
 export class PatientEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -12,7 +12,7 @@ export class PatientEntity {
   @Column({ length: 16 })
   name: string;
 
-  @Column()
+  @Column({ length: 11 })
   phoneNumber: string;
 
   @Column({ length: 15 })

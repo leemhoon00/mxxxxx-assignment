@@ -34,8 +34,12 @@ export class PatientService {
       memo: string | null;
     }[];
 
-    // 시간복잡도 O(1)을 위한 자료구조입니다.
+    // 차트번호가 없는 환자 데이터를 저장할 객체입니다.
+    // 키는 "이름_전화번호"로 구성됩니다.
     const notChartNumberPatients: Record<string, CreatePatientInput> = {};
+
+    // 차트번호가 있는 환자 데이터를 저장할 객체입니다.
+    // 키는 "이름_전화번호_차트번호"로 구성됩니다.
     const chartNumberPatients: Record<string, CreatePatientInput> = {};
 
     // header를 재정의했기에 첫 데이터는 한글 헤더가 받아와지는데 해당 데이터는 버립니다.
@@ -50,6 +54,7 @@ export class PatientService {
         continue;
 
       const phoneNumber = String(patient.phoneNumber).replaceAll('-', '');
+
       let residentNumber: string;
 
       // 주민등록번호 변환
@@ -65,7 +70,7 @@ export class PatientService {
         const key = `${patient.name}_${phoneNumber}`;
         notChartNumberPatients[key] = {
           name: patient.name,
-          phoneNumber: String(patient.phoneNumber),
+          phoneNumber,
           chartNumber: 0,
           residentNumber,
           address: patient.address,
@@ -83,7 +88,7 @@ export class PatientService {
         const key = `${patient.name}_${phoneNumber}_${patient.chartNumber}`;
         chartNumberPatients[key] = {
           name: patient.name,
-          phoneNumber: String(patient.phoneNumber),
+          phoneNumber,
           chartNumber: Number(patient.chartNumber),
           residentNumber,
           address: patient.address,
